@@ -23,6 +23,7 @@ public class GuardEars : MonoBehaviour
         if (other.gameObject == soundSphere)
         {
             Debug.Log("sound heard");
+            GameObject.FindObjectOfType<GameManager>().GameOver();
         }
     }
 }
