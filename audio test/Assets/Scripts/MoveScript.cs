@@ -72,5 +72,12 @@ public class MoveScript : MonoBehaviour
 
         // call .Move() once only
         controller.Move(move * Time.deltaTime);
+        
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+        Physics.Raycast(ray, out hit);
+        Vector3 normalisedPoint = hit.point;
+        normalisedPoint.y = 1;
+        transform.LookAt(normalisedPoint);
     }
 }
