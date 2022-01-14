@@ -31,6 +31,7 @@ public class CalibrateButton : MonoBehaviour
             { 
                 sphere.Calibration();
             }
+            Debug.Log(sphere.maxVolume);
             calibrating = false;
         } else
         {

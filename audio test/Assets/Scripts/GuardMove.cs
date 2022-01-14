@@ -18,7 +18,7 @@ public class GuardMove : MonoBehaviour
     void Start()
     {
         patrolPointCount = patrolPoints.Count;
-        
+        //footstep.Play();
         //ToDo: implement removing doubles
         /*
         for (int i = 1; i<=patrolPointCount; i++)
@@ -26,7 +26,7 @@ public class GuardMove : MonoBehaviour
             if (patrolPoints[i-1] == patrolPoints[i]) { }
         }
         */
-        
+
         targetPoint = patrolPoints[0];
 
         footstep = GetComponent<AudioSource>();
