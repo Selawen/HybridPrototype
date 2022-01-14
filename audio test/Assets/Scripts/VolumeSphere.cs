@@ -7,6 +7,9 @@ public class VolumeSphere : MonoBehaviour
     [SerializeField] private AudioSource micAudio;
     private bool running;
 
+    float scaleModifier;
+    public float maxVolume = 0.01f;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -16,6 +19,7 @@ public class VolumeSphere : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Debug.Log(maxVolume);
         if (!running)
         {
             running = true;
@@ -57,9 +61,32 @@ public class VolumeSphere : MonoBehaviour
 
         averageSample = Mathf.Clamp(averageSample, 0, 0.05f);
         //Debug.Log(averageSample);
-        transform.localScale *= (averageSample * 1000);
-        this.GetComponent<SphereCollider>().radius = transform.localScale.x / 2;
+        transform.localScale *= (averageSample * 100 / maxVolume);
+        //this.GetComponent<SphereCollider>().radius = transform.localScale.x / 4;
 
         running = false;
     } 
+
+    public void Calibration()
+    {
+        float[] samples = new float[micAudio.clip.samples * micAudio.clip.channels];
+        micAudio.clip.GetData(samples, 0);
+
+
+        float peakSample =0;
+
+        for (int i = 0; i < samples.Length / 10; i++)
+        {
+            if (samples[i] > peakSample)
+            {
+                peakSample = samples[i];
+            }
+        }
+
+        if (maxVolume < peakSample)
+        {
+            maxVolume = peakSample;
+        }
+        Debug.Log(peakSample);
+    }
 }
