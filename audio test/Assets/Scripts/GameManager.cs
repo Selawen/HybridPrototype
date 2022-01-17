@@ -15,6 +15,9 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI targetText;
     [Range(1, 10)] public int totalTargets;
     private int targetsHit = 0;
+
+    [SerializeField] private AudioSource lastPew;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -40,20 +43,25 @@ public class GameManager : MonoBehaviour
             return;
         }
 
+
+        if (targetsHit == totalTargets)
+        {
+            targetText.text = "Hit: " + targetsHit + "/" + totalTargets;
+            Win();
+            return;
+        }
+
         if (Input.GetKeyDown(KeyCode.Minus))
         {
             targetsHit--;
         } else if (Input.GetKeyDown(KeyCode.Equals))
         {
             targetsHit++;
+            GetComponent<AudioSource>().Play();
         }
 
         targetText.text = "Hit: " + targetsHit + "/" + totalTargets;
 
-        if (targetsHit == totalTargets)
-        {
-            Win();
-        }
     }
 
     public void GameOver()
@@ -64,6 +72,7 @@ public class GameManager : MonoBehaviour
 
     public void Win()
     {
+        lastPew.Play();
         EndGame();
         Debug.Log("Win");
     }
