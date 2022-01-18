@@ -24,7 +24,7 @@ public class MicSource : MonoBehaviour
             Microphone.GetDeviceCaps(Microphone.devices[0], out minFreq, out maxFreq);
             audio.clip = Microphone.Start(Microphone.devices[0], true, 1, minFreq);
         }
-        else audio.clip = Microphone.Start(micName, true, 1, micFreq);
+        else audio.clip = Microphone.Start(micName, true, 0, micFreq);
         
         audio.loop = true;
 

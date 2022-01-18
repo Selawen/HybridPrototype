@@ -7,6 +7,7 @@ public class VolumeSphere : MonoBehaviour
     [SerializeField] private AudioSource micAudio;
     private bool running;
 
+    float averageSample;
     [SerializeField] float scaleModifier;
     public float maxVolume = 0.01f;
 
@@ -29,7 +30,7 @@ public class VolumeSphere : MonoBehaviour
 
    IEnumerator PollVolume()
     {
-        yield return new WaitForSeconds(0.05f);
+        yield return new WaitForSeconds(0.005f);
         transform.localScale = new Vector3(1, 1, 1);
 
 
@@ -37,7 +38,7 @@ public class VolumeSphere : MonoBehaviour
         micAudio.clip.GetData(samples, 0);
 
 
-        float averageSample = 0;
+        averageSample = 0;
         int inputCount = 0;
 
         /*foreach (float s in samples)
@@ -51,17 +52,22 @@ public class VolumeSphere : MonoBehaviour
         */
         for (int i =0; i<samples.Length/50; i++)
         {
-            if (samples[i] > 0.00001f)
+            if (samples[i] > 0.0005f)
             {
                 averageSample += samples[i];
                 inputCount++;
             }
         }
-        averageSample /= (inputCount);
+        if (inputCount != 0) averageSample /= (inputCount);
 
-        //averageSample = Mathf.Clamp(averageSample, 0, 0.05f);
+        averageSample = Mathf.Clamp(averageSample, 0, 0.05f);
         //Debug.Log(averageSample);
-        transform.localScale *= (averageSample * scaleModifier / maxVolume);
+
+        if (averageSample == 0) averageSample = 0.00001f;
+        float scaleMultiplier = averageSample * scaleModifier / maxVolume;
+        scaleMultiplier = Mathf.Clamp(scaleMultiplier, 0, 7f);
+        //Debug.Log(scaleMultiplier);
+        transform.localScale *= scaleMultiplier;
         //this.GetComponent<SphereCollider>().radius = transform.localScale.x / 4;
 
         running = false;

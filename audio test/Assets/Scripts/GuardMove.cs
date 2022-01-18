@@ -11,6 +11,7 @@ public class GuardMove : MonoBehaviour
     [SerializeField] private int patrolTarget = 0;
 
     [SerializeField] private bool waiting;
+    [SerializeField] private List<int> waitPoints;
 
     private AudioSource footstep;
 
@@ -37,7 +38,15 @@ public class GuardMove : MonoBehaviour
     {
         if (transform.position == targetPoint)
         {
-            waiting = true;
+            foreach (int i in waitPoints) 
+            { 
+                if (i == patrolTarget)
+                {
+                    waiting = true;
+                    break;
+                }
+            }
+            
             if(patrolTarget < patrolPointCount)
             {
                 
@@ -48,8 +57,10 @@ public class GuardMove : MonoBehaviour
                 patrolTarget = 0;
                 targetPoint = patrolPoints[patrolTarget];
             }
-            StartCoroutine(LookAround());
+
+            if (waiting) StartCoroutine(LookAround());
         } 
+
         if (!waiting)
         {
             transform.position = Vector3.MoveTowards(transform.position, targetPoint, Time.deltaTime);

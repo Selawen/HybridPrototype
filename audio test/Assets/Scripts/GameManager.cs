@@ -6,7 +6,8 @@ using TMPro;
 
 public class GameManager : MonoBehaviour
 {
-    public GameObject panel;
+    public GameObject mainPanel;
+    public GameObject heardPanel;
 
     public TextMeshProUGUI timerText;
     [Range(1, 900)] public float timer;
@@ -66,21 +67,27 @@ public class GameManager : MonoBehaviour
 
     public void GameOver()
     {
-        EndGame();
-        Debug.Log("GameOver");
+        heardPanel.SetActive(true);
+        //Debug.Log("GameOver");
     } 
 
     public void Win()
     {
         lastPew.Play();
-        EndGame();
+        StartCoroutine(Escapetime());
         Debug.Log("Win");
     }
 
-    private void EndGame()
+    private IEnumerator Escapetime()
+    {
+        yield return new WaitForSeconds(5);
+        EndGame();
+    }
+
+    public void EndGame()
     {
         Time.timeScale = 0;
-        panel.SetActive(true);
+        mainPanel.SetActive(true);
         timer = maxTime;
         targetsHit = 0;
     }
