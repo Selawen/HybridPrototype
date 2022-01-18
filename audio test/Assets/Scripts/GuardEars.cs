@@ -5,6 +5,7 @@ using UnityEngine;
 public class GuardEars : MonoBehaviour
 {
     [SerializeField] private GameObject soundSphere;
+    [SerializeField] private AudioSource alerted;
 
     // Start is called before the first frame update
     void Start()
@@ -22,6 +23,7 @@ public class GuardEars : MonoBehaviour
     {   
         if (other.gameObject == soundSphere)
         {
+            alerted.Play();
             Debug.Log("sound heard");
             GameObject.FindObjectOfType<GameManager>().GameOver();
         }
