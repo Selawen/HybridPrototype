@@ -5,6 +5,7 @@ using UnityEngine;
 public class MoveScript : MonoBehaviour
 {
     private CharacterController controller;
+    [SerializeField] private bool swapVertices;
     private float verticalVelocity;
     private float groundedTimer;        // to allow jumping when going down ramps
     [SerializeField] private float playerSpeed = 2.0f;
@@ -42,7 +43,16 @@ public class MoveScript : MonoBehaviour
         verticalVelocity -= gravityValue * Time.deltaTime;
 
         // gather lateral input control
-        Vector3 move = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+        Vector3 move;
+        // swap vertices so you won't need to do it in your head
+        if (swapVertices)
+        {
+                    move = new Vector3(Input.GetAxis("Vertical"), 0, -1*Input.GetAxis("Horizontal"));
+        } else 
+        {
+                    move = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+
+        }
 
         // scale by speed
         move *= playerSpeed;
